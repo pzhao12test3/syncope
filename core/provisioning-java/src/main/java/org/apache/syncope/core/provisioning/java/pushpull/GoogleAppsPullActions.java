@@ -81,33 +81,41 @@ public class GoogleAppsPullActions implements PullActions {
     }
 
     @Override
-    public void beforeProvision(
+    public SyncDelta beforeProvision(
             final ProvisioningProfile<?, ?> profile,
             final SyncDelta delta,
             final EntityTO entity) throws JobExecutionException {
 
-        if (entity instanceof UserTO) {
-            UserTO userTO = (UserTO) entity;
-            if (userTO.getUsername() == null) {
-                userTO.setUsername(delta.getObject().getName().getNameValue());
-            }
+        if (!(entity instanceof UserTO)) {
+            return delta;
         }
+
+        UserTO userTO = (UserTO) entity;
+        if (userTO.getUsername() == null) {
+            userTO.setUsername(delta.getObject().getName().getNameValue());
+        }
+
+        return delta;
     }
 
     @Override
-    public <P extends AnyPatch> void beforeUpdate(
+    public <P extends AnyPatch> SyncDelta beforeUpdate(
             final ProvisioningProfile<?, ?> profile,
             final SyncDelta delta,
             final EntityTO entity,
             final P anyPatch) throws JobExecutionException {
 
-        if (anyPatch instanceof UserPatch) {
-            UserPatch userPatch = (UserPatch) anyPatch;
-            if (userPatch.getUsername() == null) {
-                userPatch.setUsername(new StringReplacePatchItem.Builder().
-                        value(delta.getObject().getName().getNameValue()).build());
-            }
+        if (!(anyPatch instanceof UserPatch)) {
+            return delta;
         }
+
+        UserPatch userPatch = (UserPatch) anyPatch;
+        if (userPatch.getUsername() == null) {
+            userPatch.setUsername(new StringReplacePatchItem.Builder().
+                    value(delta.getObject().getName().getNameValue()).build());
+        }
+
+        return delta;
     }
 
     @Transactional

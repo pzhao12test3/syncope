@@ -104,15 +104,13 @@ public class SyncopeConsoleApplication extends AuthenticatedWebApplication {
 
     private String useGZIPCompression;
 
-    private Integer maxUploadFileSizeMB;
-
     private List<String> domains;
 
     private Map<String, Class<? extends BasePage>> pageClasses;
 
     @SuppressWarnings("unchecked")
     protected void populatePageClasses(final Properties props) {
-        Enumeration<String> propNames = (Enumeration<String>) props.propertyNames();
+        Enumeration<String> propNames = (Enumeration<String>) props.<String>propertyNames();
         while (propNames.hasMoreElements()) {
             String name = propNames.nextElement();
             if (name.startsWith("page.")) {
@@ -155,9 +153,6 @@ public class SyncopeConsoleApplication extends AuthenticatedWebApplication {
         Args.notNull(rootPath, "<rootPath>");
         useGZIPCompression = props.getProperty("useGZIPCompression");
         Args.notNull(useGZIPCompression, "<useGZIPCompression>");
-        maxUploadFileSizeMB = props.getProperty("maxUploadFileSizeMB") == null
-                ? null
-                : Integer.valueOf(props.getProperty("maxUploadFileSizeMB"));
 
         String csrf = props.getProperty("csrf");
 
@@ -283,10 +278,6 @@ public class SyncopeConsoleApplication extends AuthenticatedWebApplication {
 
     public String getReconciliationReportKey() {
         return reconciliationReportKey;
-    }
-
-    public Integer getMaxUploadFileSizeMB() {
-        return maxUploadFileSizeMB;
     }
 
     public SyncopeClientFactoryBean newClientFactory() {

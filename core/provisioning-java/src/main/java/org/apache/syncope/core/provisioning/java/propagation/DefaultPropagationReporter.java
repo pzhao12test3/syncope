@@ -31,10 +31,14 @@ import org.apache.syncope.core.provisioning.java.utils.ConnObjectUtils;
 import org.identityconnectors.framework.common.objects.ConnectorObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class DefaultPropagationReporter implements PropagationReporter {
 
     protected static final Logger LOG = LoggerFactory.getLogger(DefaultPropagationReporter.class);
+
+    @Autowired
+    protected ConnObjectUtils connObjectUtils;
 
     protected final List<PropagationStatus> statuses = new ArrayList<>();
 
@@ -58,11 +62,11 @@ public class DefaultPropagationReporter implements PropagationReporter {
         status.setFailureReason(failureReason);
 
         if (beforeObj != null) {
-            status.setBeforeObj(ConnObjectUtils.getConnObjectTO(beforeObj));
+            status.setBeforeObj(connObjectUtils.getConnObjectTO(beforeObj));
         }
 
         if (afterObj != null) {
-            status.setAfterObj(ConnObjectUtils.getConnObjectTO(afterObj));
+            status.setAfterObj(connObjectUtils.getConnObjectTO(afterObj));
         }
 
         add(status);

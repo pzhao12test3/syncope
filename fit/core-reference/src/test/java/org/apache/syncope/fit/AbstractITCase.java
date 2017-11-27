@@ -18,9 +18,9 @@
  */
 package org.apache.syncope.fit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.InputStream;
 import java.net.URI;
@@ -81,7 +81,6 @@ import org.apache.syncope.common.rest.api.service.PolicyService;
 import org.apache.syncope.common.rest.api.service.ReportService;
 import org.apache.syncope.common.rest.api.service.ResourceService;
 import org.apache.syncope.common.rest.api.service.GroupService;
-import org.apache.syncope.common.rest.api.service.ImplementationService;
 import org.apache.syncope.common.rest.api.service.MailTemplateService;
 import org.apache.syncope.common.rest.api.service.RealmService;
 import org.apache.syncope.common.rest.api.service.RelationshipTypeService;
@@ -90,7 +89,6 @@ import org.apache.syncope.common.rest.api.service.ResourceHistoryService;
 import org.apache.syncope.common.rest.api.service.RoleService;
 import org.apache.syncope.common.rest.api.service.SAML2IdPService;
 import org.apache.syncope.common.rest.api.service.SAML2SPService;
-import org.apache.syncope.common.rest.api.service.SCIMConfService;
 import org.apache.syncope.common.rest.api.service.SchemaService;
 import org.apache.syncope.common.rest.api.service.SecurityQuestionService;
 import org.apache.syncope.common.rest.api.service.SyncopeService;
@@ -101,11 +99,14 @@ import org.apache.syncope.common.rest.api.service.UserWorkflowService;
 import org.apache.syncope.common.rest.api.service.WorkflowService;
 import org.apache.syncope.fit.core.UserITCase;
 import org.identityconnectors.common.security.Encryptor;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+@FixMethodOrder(MethodSorters.JVM)
 public abstract class AbstractITCase {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractITCase.class);
@@ -236,17 +237,13 @@ public abstract class AbstractITCase {
 
     protected static SecurityQuestionService securityQuestionService;
 
-    protected static ImplementationService implementationService;
-
     protected static CamelRouteService camelRouteService;
 
     protected static SAML2SPService saml2SpService;
 
     protected static SAML2IdPService saml2IdPService;
 
-    protected static SCIMConfService scimConfService;
-
-    @BeforeAll
+    @BeforeClass
     public static void securitySetup() {
         InputStream propStream = null;
         try {
@@ -270,7 +267,7 @@ public abstract class AbstractITCase {
         assertNotNull(JWT_ISSUER);
     }
 
-    @BeforeAll
+    @BeforeClass
     public static void restSetup() {
         clientFactory = new SyncopeClientFactoryBean().setAddress(ADDRESS);
 
@@ -310,11 +307,9 @@ public abstract class AbstractITCase {
         notificationService = adminClient.getService(NotificationService.class);
         schemaService = adminClient.getService(SchemaService.class);
         securityQuestionService = adminClient.getService(SecurityQuestionService.class);
-        implementationService = adminClient.getService(ImplementationService.class);
         camelRouteService = adminClient.getService(CamelRouteService.class);
         saml2SpService = adminClient.getService(SAML2SPService.class);
         saml2IdPService = adminClient.getService(SAML2IdPService.class);
-        scimConfService = adminClient.getService(SCIMConfService.class);
     }
 
     protected static String getUUIDString() {
@@ -329,7 +324,7 @@ public abstract class AbstractITCase {
         return new AttrPatch.Builder().operation(PatchOperation.ADD_REPLACE).attrTO(attrTO(schema, value)).build();
     }
 
-    public static <T> T getObject(final URI location, final Class<?> serviceClass, final Class<T> resultClass) {
+    public <T> T getObject(final URI location, final Class<?> serviceClass, final Class<T> resultClass) {
         WebClient webClient = WebClient.fromClient(WebClient.client(adminClient.getService(serviceClass)));
         webClient.accept(clientFactory.getContentType().getMediaType()).to(location.toASCIIString(), false);
 

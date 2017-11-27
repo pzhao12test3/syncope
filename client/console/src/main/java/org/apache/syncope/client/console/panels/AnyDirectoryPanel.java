@@ -211,7 +211,8 @@ public abstract class AnyDirectoryPanel<A extends AnyTO, E extends AbstractAnyRe
 
     @Override
     protected AnyDataProvider<A> dataProvider() {
-        return new AnyDataProvider<>(restClient, rows, filtered, realm, type, pageRef).setFIQL(this.fiql);
+        final AnyDataProvider<A> dp = new AnyDataProvider<>(restClient, rows, filtered, realm, type);
+        return dp.setFIQL(this.fiql);
     }
 
     public void search(final String fiql, final AjaxRequestTarget target) {

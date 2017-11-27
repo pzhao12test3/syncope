@@ -60,8 +60,6 @@ public class UserTO extends AnyTO implements GroupableRelatableTO {
 
     private String securityAnswer;
 
-    private boolean suspended;
-
     private boolean mustChangePassword;
 
     private final List<RelationshipTO> relationships = new ArrayList<>();
@@ -187,14 +185,6 @@ public class UserTO extends AnyTO implements GroupableRelatableTO {
         this.securityAnswer = securityAnswer;
     }
 
-    public boolean isSuspended() {
-        return suspended;
-    }
-
-    public void setSuspended(final boolean suspended) {
-        this.suspended = suspended;
-    }
-
     public boolean isMustChangePassword() {
         return mustChangePassword;
     }
@@ -205,9 +195,9 @@ public class UserTO extends AnyTO implements GroupableRelatableTO {
 
     @JsonIgnore
     @Override
-    public Optional<RelationshipTO> getRelationship(final String type, final String otherKey) {
+    public Optional<RelationshipTO> getRelationship(final String type, final String rightKey) {
         return relationships.stream().filter(
-                relationship -> type.equals(relationship.getType()) && otherKey.equals(relationship.getOtherEndKey())).
+                relationship -> type.equals(relationship.getType()) && rightKey.equals(relationship.getRightKey())).
                 findFirst();
     }
 

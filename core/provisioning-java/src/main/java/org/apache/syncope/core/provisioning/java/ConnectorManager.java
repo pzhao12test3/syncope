@@ -24,13 +24,12 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import org.apache.syncope.common.lib.to.ConnInstanceTO;
 import org.apache.syncope.common.lib.types.ConnConfProperty;
 import org.apache.syncope.common.lib.types.ConnectorCapability;
 import org.apache.syncope.core.spring.security.AuthContextUtils;
 import org.apache.syncope.core.spring.ApplicationContextProvider;
+import org.apache.syncope.core.persistence.api.SyncopeLoader;
 import org.apache.syncope.core.persistence.api.dao.ExternalResourceDAO;
-import org.apache.syncope.core.persistence.api.dao.RealmDAO;
 import org.apache.syncope.core.persistence.api.entity.ConnInstance;
 import org.apache.syncope.core.persistence.api.entity.EntityFactory;
 import org.apache.syncope.core.provisioning.api.ConnIdBundleManager;
@@ -38,7 +37,6 @@ import org.apache.syncope.core.provisioning.api.Connector;
 import org.apache.syncope.core.provisioning.api.ConnectorFactory;
 import org.apache.syncope.core.provisioning.api.ConnectorRegistry;
 import org.apache.syncope.core.persistence.api.entity.resource.ExternalResource;
-import org.apache.syncope.core.provisioning.api.data.ConnInstanceDataBinder;
 import org.identityconnectors.common.l10n.CurrentLocale;
 import org.identityconnectors.framework.api.ConnectorFacadeFactory;
 import org.slf4j.Logger;
@@ -48,7 +46,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
+public class ConnectorManager implements ConnectorRegistry, ConnectorFactory, SyncopeLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectorManager.class);
 
@@ -56,15 +54,14 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
     private ConnIdBundleManager connIdBundleManager;
 
     @Autowired
-    private RealmDAO realmDAO;
-
-    @Autowired
     private ExternalResourceDAO resourceDAO;
 
-    @Autowired
-    private ConnInstanceDataBinder connInstanceDataBinder;
-
     private EntityFactory entityFactory;
+
+    @Override
+    public Integer getPriority() {
+        return 100;
+    }
 
     private String getBeanName(final ExternalResource resource) {
         return String.format("connInstance-%s-%S-%s",
@@ -83,7 +80,7 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
 
     @Override
     public ConnInstance buildConnInstanceOverride(
-            final ConnInstanceTO connInstance,
+            final ConnInstance connInstance,
             final Collection<ConnConfProperty> confOverride,
             final Collection<ConnectorCapability> capabilitiesOverride) {
 
@@ -94,7 +91,7 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
         }
 
         ConnInstance override = entityFactory.newEntity(ConnInstance.class);
-        override.setAdminRealm(realmDAO.findByFullPath(connInstance.getAdminRealm()));
+        override.setAdminRealm(connInstance.getAdminRealm());
         override.setConnectorName(connInstance.getConnectorName());
         override.setDisplayName(connInstance.getDisplayName());
         override.setBundleName(connInstance.getBundleName());
@@ -115,7 +112,7 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
             }
         }
 
-        // add override properties
+        // add overridden properties
         for (ConnConfProperty prop : confOverride) {
             if (overridable.containsKey(prop.getSchema().getName()) && !prop.getValues().isEmpty()) {
                 conf.add(prop);
@@ -123,7 +120,7 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
             }
         }
 
-        // add override properties not substituted
+        // add overridable properties not overridden
         conf.addAll(overridable.values());
 
         override.setConf(conf);
@@ -148,7 +145,7 @@ public class ConnectorManager implements ConnectorRegistry, ConnectorFactory {
     @Override
     public void registerConnector(final ExternalResource resource) {
         ConnInstance connInstance = buildConnInstanceOverride(
-                connInstanceDataBinder.getConnInstanceTO(resource.getConnector()),
+                resource.getConnector(),
                 resource.getConfOverride(),
                 resource.isOverrideCapabilities() ? resource.getCapabilitiesOverride() : null);
         Connector connector = createConnector(connInstance);

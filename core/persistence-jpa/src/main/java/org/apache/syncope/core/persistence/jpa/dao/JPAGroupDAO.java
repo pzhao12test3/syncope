@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -160,12 +161,15 @@ public class JPAGroupDAO extends AbstractAnyDAO<Group> implements GroupDAO {
     public Map<String, Integer> countByRealm() {
         Query query = entityManager().createQuery(
                 "SELECT e.realm, COUNT(e) FROM  " + JPAGroup.class.getSimpleName() + " e GROUP BY e.realm");
-
         @SuppressWarnings("unchecked")
         List<Object[]> results = query.getResultList();
-        return results.stream().collect(Collectors.toMap(
-                result -> ((Realm) result[0]).getFullPath(),
-                result -> ((Number) result[1]).intValue()));
+
+        Map<String, Integer> countByRealm = new HashMap<>(results.size());
+        for (Object[] result : results) {
+            countByRealm.put(((Realm) result[0]).getFullPath(), ((Number) result[1]).intValue());
+        }
+
+        return Collections.unmodifiableMap(countByRealm);
     }
 
     @Override
@@ -272,7 +276,7 @@ public class JPAGroupDAO extends AbstractAnyDAO<Group> implements GroupDAO {
     private SearchCond buildDynMembershipCond(final String baseCondFIQL, final Realm groupRealm) {
         AssignableCond cond = new AssignableCond();
         cond.setRealmFullPath(groupRealm.getFullPath());
-        cond.setFromGroup(true);
+        cond.setFromGroup(false);
 
         return SearchCond.getAndCond(SearchCond.getLeafCond(cond), SearchCondConverter.convert(baseCondFIQL));
     }

@@ -371,7 +371,6 @@ app.controller('ApplicationController', ['$scope', '$rootScope', '$location', 'I
                 $rootScope.version = response.version;
                 $rootScope.pwdResetRequiringSecurityQuestions = response.pwdResetRequiringSecurityQuestions;
                 $rootScope.captchaEnabled = response.captchaEnabled;
-                $rootScope.maxUploadFileSizeMB = response.maxUploadFileSizeMB;
                 /* 
                  * USER form customization JSON
                  */
@@ -400,15 +399,12 @@ app.controller('ApplicationController', ['$scope', '$rootScope', '$location', 'I
       };
       $rootScope.saml2spExtAvailable = function () {
         return $rootScope.saml2idps.available.length > 0;
-      };
+      }
       $rootScope.saml2login = function () {
         window.location.href = '../saml2sp/login?idp=' + $rootScope.saml2idps.selected.entityID;
-      };
+      }
       $rootScope.getVersion = function () {
         return $rootScope.version;
-      };
-      $rootScope.getMaxUploadFileSizeMB = function () {
-        return $rootScope.maxUploadFileSizeMB;
       };
       /* 
        * USER Attributes sorting strategies

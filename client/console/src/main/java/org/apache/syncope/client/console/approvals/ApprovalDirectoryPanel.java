@@ -143,7 +143,6 @@ public class ApprovalDirectoryPanel
             @Override
             public void onClick(final AjaxRequestTarget target, final WorkflowFormTO ignore) {
                 claimForm(model.getObject().getTaskId());
-                SyncopeConsoleSession.get().info(getString(Constants.OPERATION_SUCCEEDED));
                 ((BasePage) pageRef.getPage()).getNotificationPanel().refresh(target);
                 target.add(container);
             }
@@ -221,6 +220,7 @@ public class ApprovalDirectoryPanel
 
                 editItemActionEvent.forceModalPanel(
                         new ApprovalUserWizardBuilder(
+                                target,
                                 formModel.getObject(),
                                 previousUserTO,
                                 newUserTO,
@@ -301,6 +301,7 @@ public class ApprovalDirectoryPanel
     private void claimForm(final String taskId) {
         try {
             restClient.claimForm(taskId);
+            SyncopeConsoleSession.get().info(getString(Constants.OPERATION_SUCCEEDED));
         } catch (SyncopeClientException scee) {
             SyncopeConsoleSession.get().error(getString(Constants.ERROR) + ": " + scee.getMessage());
         }
@@ -312,7 +313,10 @@ public class ApprovalDirectoryPanel
 
         private final WorkflowFormTO formTO;
 
+        private final AjaxRequestTarget target;
+
         ApprovalUserWizardBuilder(
+                final AjaxRequestTarget target,
                 final WorkflowFormTO formTO,
                 final UserTO previousUserTO,
                 final UserTO userTO,
@@ -322,6 +326,7 @@ public class ApprovalDirectoryPanel
 
             super(previousUserTO, userTO, anyTypeClasses, formLayoutInfo, pageRef);
             this.formTO = formTO;
+            this.target = target;
         }
 
         @Override
@@ -335,6 +340,7 @@ public class ApprovalDirectoryPanel
                 UserTO user = new UserWorkflowRestClient().executeTask("default", inner);
                 actual.setEntity(user);
                 claimForm(restClient.getFormForUser(actual.getEntity().getKey()).getTaskId());
+                ((BasePage) pageRef.getPage()).getNotificationPanel().refresh(target);
             } else {
                 UserPatch patch = AnyOperations.diff(inner, formTO.getUserTO(), false);
 
@@ -352,6 +358,7 @@ public class ApprovalDirectoryPanel
                 } else {
                     actual = userRestClient.update(getOriginalItem().getInnerObject().getETagValue(), patch);
                     claimForm(restClient.getFormForUser(actual.getEntity().getKey()).getTaskId());
+                    ((BasePage) pageRef.getPage()).getNotificationPanel().refresh(target);
                 }
 
             }

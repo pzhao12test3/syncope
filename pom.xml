@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -33,7 +32,7 @@ under the License.
     <groupId>org.apache</groupId>
     <artifactId>apache</artifactId>
     <version>18</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <url>http://syncope.apache.org/</url>
@@ -360,20 +359,20 @@ under the License.
     <connid.soap.version>1.4.2-SNAPSHOT</connid.soap.version>
     <connid.rest.version>1.0.1</connid.rest.version>
     <connid.database.version>2.2.5</connid.database.version>
-    <connid.csvdir.version>0.8.7</connid.csvdir.version>
+    <connid.csvdir.version>0.8.6</connid.csvdir.version>
     <connid.ldap.version>1.5.2</connid.ldap.version>
     <connid.ad.version>1.3.4</connid.ad.version>
-    <connid.googleapps.version>1.4.1</connid.googleapps.version>
+    <connid.googleapps.version>1.4.1-SNAPSHOT</connid.googleapps.version>
 
-    <cxf.version>3.2.1</cxf.version>
+    <cxf.version>3.2.0</cxf.version>
 
     <jackson.version>2.9.1</jackson.version>
 
-    <spring.version>5.0.1.RELEASE</spring.version>
+    <spring.version>4.3.11.RELEASE</spring.version>
     <spring-security.version>4.2.3.RELEASE</spring-security.version>
 
     <openjpa.version>3.0.0-SNAPSHOT</openjpa.version>
-    <hikaricp.version>2.7.2</hikaricp.version>
+    <hikaricp.version>2.7.1</hikaricp.version>
     <bval.version>1.1.2</bval.version>
 
     <jasypt.version>1.9.2</jasypt.version>
@@ -382,24 +381,24 @@ under the License.
 
     <cocoon.version>3.0.0-alpha-3</cocoon.version>
 
-    <groovy.version>2.5.0-beta-2</groovy.version>
+    <groovy.version>2.4.12</groovy.version>
 
-    <flowable.version>6.2.0</flowable.version>
+    <flowable.version>6.1.2</flowable.version>
 
     <camel.version>2.19.3</camel.version>	
 
     <slf4j.version>1.7.25</slf4j.version>
     <opensaml.version>3.3.0</opensaml.version>
 
-    <elasticsearch.version>5.6.2</elasticsearch.version>
+    <elasticsearch.version>5.6.0</elasticsearch.version>
 
-    <log4j.version>2.10.0</log4j.version>
-    <disruptor.version>3.3.7</disruptor.version>
+    <log4j.version>2.9.0</log4j.version>
+    <disruptor.version>3.3.6</disruptor.version>
 
     <commons-io.version>2.5</commons-io.version>
     <commons-email.version>1.5</commons-email.version>
     <commons-jexl.version>3.1</commons-jexl.version>
-    <commons-lang.version>3.7</commons-lang.version>
+    <commons-lang.version>3.6</commons-lang.version>
     <commons-text.version>1.1</commons-text.version>
     <commons-logging.version>1.1.3</commons-logging.version>
 
@@ -407,7 +406,7 @@ under the License.
 
     <h2.version>1.4.196</h2.version>
 
-    <junit.version>5.1.0-M1</junit.version>
+    <junit.version>4.12</junit.version>
 
     <conf.directory>${project.build.directory}/test-classes</conf.directory>
     <bundles.directory>${project.build.directory}/bundles</bundles.directory>
@@ -436,7 +435,7 @@ under the License.
     <jsplumb.version>2.0.7</jsplumb.version>
     
     <wicket.version>7.9.0</wicket.version>
-    <wicket-jqueryui.version>7.9.0</wicket-jqueryui.version>
+    <wicket-jqueryui.version>7.8.0</wicket-jqueryui.version>
     <wicket-bootstrap.version>0.10.16</wicket-bootstrap.version>
     <wicket-chartjs.version>7.0.1</wicket-chartjs.version>
 
@@ -462,8 +461,6 @@ under the License.
     <tycho.version>1.0.0</tycho.version>
     <netbeans.version>RELEASE82</netbeans.version>
 
-    <antlr4.version>4.7</antlr4.version>
-
     <testds.port>1389</testds.port>
     <testdb.webport>9082</testdb.webport>
 
@@ -483,7 +480,7 @@ under the License.
     <cargo.log>${log.directory}/cargo.log</cargo.log>
     <cargo.output>${log.directory}/cargo-output.log</cargo.output>
 
-    <tomcat.version>9.0.1</tomcat.version>
+    <tomcat.version>8.5.20</tomcat.version>
 
     <phantomjs.driver.version>1.2.0</phantomjs.driver.version>
     <phantomjs.version>2.1.1</phantomjs.version>
@@ -928,7 +925,7 @@ under the License.
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
-        <version>1.8.13</version>
+        <version>1.8.10</version>
       </dependency>
       
       <dependency>
@@ -1571,12 +1568,6 @@ under the License.
         <version>${netbeans.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.antlr</groupId>
-        <artifactId>antlr4-runtime</artifactId>
-        <version>${antlr4.version}</version>
-      </dependency>
-
       <!-- TEST -->
       <dependency>
         <groupId>com.github.detro</groupId>
@@ -1589,12 +1580,6 @@ under the License.
         <artifactId>greenmail</artifactId>
         <version>1.5.5</version>
         <scope>test</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-          </exclusion>
-        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.bouncycastle</groupId>
@@ -1609,8 +1594,8 @@ under the License.
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter-engine</artifactId>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
@@ -1633,26 +1618,12 @@ under the License.
       <id>netbeans</id>
       <url>http://bits.netbeans.org/maven2/</url>
     </repository>
-    <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-    </repository>
   </repositories>
 
   <pluginRepositories>
     <pluginRepository>
       <id>apache.snapshots</id>
       <url>http://repository.apache.org/snapshots</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>sonatype</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
     </pluginRepository>
   </pluginRepositories>
 
@@ -1766,7 +1737,7 @@ under the License.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.1.0</version>
           <configuration>
             <webResources>
               <resource>
@@ -1803,10 +1774,10 @@ under the License.
         <plugin>
           <groupId>org.codehaus.cargo</groupId>
           <artifactId>cargo-maven2-plugin</artifactId>
-          <version>1.6.5</version>
+          <version>1.6.4</version>
           <configuration>
             <container>
-              <containerId>tomcat9x</containerId>
+              <containerId>tomcat8x</containerId>
               <zipUrlInstaller>
                 <url>http://central.maven.org/maven2/org/apache/tomcat/tomcat/${tomcat.version}/tomcat-${tomcat.version}.zip</url>
                 <downloadDir>${settings.localRepository}/org/codehaus/cargo/cargo-container-archives</downloadDir>
@@ -1819,43 +1790,27 @@ under the License.
           </configuration>
         </plugin>
         
-        <!-- Keep the following plugins on 2.19.1 / 1.0.1 until
-        https://github.com/junit-team/junit5/issues/809 is properly fixed -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.20.1</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <encoding>utf-8</encoding>
             <runOrder>alphabetical</runOrder>
             <argLine>-Xms512m -Xmx1024m -Xss256k</argLine>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>1.1.0-M1</version>
-            </dependency>
-          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
-          <version>2.19.1</version>
+          <version>2.20.1</version>
           <configuration>
             <redirectTestOutputToFile>true</redirectTestOutputToFile>
             <encoding>utf-8</encoding>
             <runOrder>alphabetical</runOrder>
             <argLine>-Xms512m -Xmx1024m -Xss256k</argLine>
           </configuration>
-          <dependencies>
-            <dependency>
-              <groupId>org.junit.platform</groupId>
-              <artifactId>junit-platform-surefire-provider</artifactId>
-              <version>1.1.0-M1</version>
-            </dependency>
-          </dependencies>
           <executions>
             <execution>
               <goals>
@@ -1936,18 +1891,12 @@ under the License.
         <plugin>
           <groupId>com.github.eirslett</groupId>
           <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.6</version>
+          <version>1.5</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.6.0</version>
-        </plugin>
-        
-        <plugin>
-          <groupId>org.antlr</groupId>
-          <artifactId>antlr4-maven-plugin</artifactId>
-          <version>${antlr4.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -2077,7 +2026,10 @@ under the License.
             <exclude>**/*.lst</exclude>
             <exclude>**/*.json</exclude>
             <exclude>**/target/**</exclude>
-          </excludes>
+          <exclude>**/.ekstazi/**</exclude>
+                        <exclude>**/.travis.yml</exclude>
+                        <exclude>**/NOW</exclude>
+                    </excludes>
         </configuration>
         <executions>
           <execution>
@@ -2177,7 +2129,20 @@ under the License.
           <tagNameFormat>syncope-@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
-    </plugins>
+    <plugin>
+                <groupId>org.ekstazi</groupId>
+                <artifactId>ekstazi-maven-plugin</artifactId>
+                <version>4.6.3</version>
+                <executions>
+                    <execution>
+                        <id>ekstazi</id>
+                        <goals>
+                            <goal>select</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     
   </build>
 
@@ -2233,7 +2198,7 @@ under the License.
             <link>http://www.flowable.org/docs/javadocs/</link>
             <link>https://build.shibboleth.net/nexus/service/local/repositories/releases/archive/org/opensaml/opensaml-saml-api/3.3.0/opensaml-saml-api-3.3.0-javadoc.jar/!/index.html</link>
             <link>https://build.shibboleth.net/nexus/service/local/repositories/releases/archive/org/opensaml/opensaml-core/3.3.0/opensaml-core-3.3.0-javadoc.jar/!/index.html</link>
-            <link>https://www.javadoc.io/doc/org.elasticsearch/elasticsearch/5.6.2</link>
+            <link>https://www.javadoc.io/doc/org.elasticsearch/elasticsearch/5.6.0</link>
           </links>
         </configuration>
         <reportSets>
@@ -2312,7 +2277,7 @@ under the License.
           <plugin>
             <groupId>org.asciidoctor</groupId>
             <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>1.5.6</version>
+            <version>1.5.5</version>
             <dependencies>
               <dependency>
                 <groupId>org.asciidoctor</groupId>
@@ -2335,10 +2300,10 @@ under the License.
                 <year>${year}</year>
                 <numbered>true</numbered>
                 <icons>font</icons>
-                <pagenums />
-                <idprefix />
+                <pagenums/>
+                <idprefix/>
                 <idseparator>-</idseparator>
-                <allow-uri-read />
+                <allow-uri-read/>
               </attributes>
             </configuration>
             <executions>
@@ -2442,10 +2407,10 @@ under the License.
                 <configuration>
                   <target>
                     <replace dir="${rootpom.basedir}/target/site" token="48px" value="71px">
-                      <include name="**/*.html" />
+                      <include name="**/*.html"/>
                     </replace>
                     <replace dir="${rootpom.basedir}/target/site" token="dropdown-toggle&quot;" value="dropdown-toggle&quot; data-toggle=&quot;dropdown&quot;">
-                      <include name="**/*.html" />
+                      <include name="**/*.html"/>
                     </replace>
                   </target>
                 </configuration>
@@ -2459,11 +2424,11 @@ under the License.
                 <configuration>
                   <target>
                     <copy todir="${site.deploymentBaseDir}/docs">
-                      <fileset dir="${project.build.directory}/generated-docs/" includes="getting-started.*" />
-                      <fileset dir="${project.build.directory}/generated-docs/" includes="reference-guide.*" />
+                      <fileset dir="${project.build.directory}/generated-docs/" includes="getting-started.*"/>
+                      <fileset dir="${project.build.directory}/generated-docs/" includes="reference-guide.*"/>
                     </copy>
                     <copy todir="${site.deploymentBaseDir}/docs/images">
-                      <fileset dir="${project.build.directory}/generated-docs/images" />
+                      <fileset dir="${project.build.directory}/generated-docs/images"/>
                     </copy>
                   </target>
                 </configuration>
@@ -2537,3 +2502,4 @@ under the License.
   </modules>
 
 </project>
+

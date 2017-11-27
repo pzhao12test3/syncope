@@ -20,17 +20,12 @@ package org.apache.syncope.core.spring.security;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.syncope.common.lib.policy.DefaultPasswordRuleConf;
-import org.apache.syncope.core.persistence.api.dao.PasswordRule;
-import org.apache.syncope.core.persistence.api.entity.policy.PasswordPolicy;
+import org.apache.syncope.common.lib.policy.PasswordRuleConf;
+import org.apache.syncope.core.persistence.api.entity.resource.ExternalResource;
 import org.apache.syncope.core.provisioning.api.utils.policy.InvalidPasswordRuleConf;
 import org.apache.syncope.core.provisioning.api.utils.policy.PolicyPattern;
-import org.apache.syncope.core.persistence.api.entity.resource.ExternalResource;
-import org.apache.syncope.core.spring.ImplementationManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -40,8 +35,6 @@ import org.springframework.transaction.annotation.Transactional;
  * <strong>WARNING</strong>: This class only takes {@link DefaultPasswordRuleConf} into account.
  */
 public class DefaultPasswordGenerator implements PasswordGenerator {
-
-    private static final Logger LOG = LoggerFactory.getLogger(PasswordGenerator.class);
 
     private static final char[] SPECIAL_CHARS = { '!', '£', '%', '&', '(', ')', '?', '#', '$' };
 
@@ -54,29 +47,23 @@ public class DefaultPasswordGenerator implements PasswordGenerator {
     @Transactional(readOnly = true)
     @Override
     public String generate(final ExternalResource resource) throws InvalidPasswordRuleConf {
-        List<PasswordPolicy> policies = new ArrayList<>();
+        List<PasswordRuleConf> ruleConfs = new ArrayList<>();
 
         if (resource.getPasswordPolicy() != null) {
-            policies.add(resource.getPasswordPolicy());
+            ruleConfs.addAll(resource.getPasswordPolicy().getRuleConfs());
         }
 
-        return generate(policies);
+        return generate(ruleConfs);
     }
 
     @Override
-    public String generate(final List<PasswordPolicy> policies) throws InvalidPasswordRuleConf {
+    public String generate(final List<PasswordRuleConf> ruleConfs) throws InvalidPasswordRuleConf {
         List<DefaultPasswordRuleConf> defaultRuleConfs = new ArrayList<>();
-
-        policies.stream().forEach(policy -> policy.getRules().forEach(impl -> {
-            try {
-                Optional<PasswordRule> rule = ImplementationManager.buildPasswordRule(impl);
-                if (rule.isPresent() && rule.get().getConf() instanceof DefaultPasswordRuleConf) {
-                    defaultRuleConfs.add((DefaultPasswordRuleConf) rule.get().getConf());
-                }
-            } catch (Exception e) {
-                LOG.error("Invalid {}, ignoring...", impl, e);
-            }
-        }));
+        ruleConfs.stream().
+                filter(ruleConf -> (ruleConf instanceof DefaultPasswordRuleConf)).
+                forEachOrdered(ruleConf -> {
+                    defaultRuleConfs.add((DefaultPasswordRuleConf) ruleConf);
+                });
 
         DefaultPasswordRuleConf ruleConf = merge(defaultRuleConfs);
         check(ruleConf);
@@ -314,17 +301,17 @@ public class DefaultPasswordGenerator implements PasswordGenerator {
     }
 
     private void checkPrefixAndSuffix(final String[] generatedPassword, final DefaultPasswordRuleConf ruleConf) {
-        ruleConf.getPrefixesNotPermitted().forEach(prefix -> {
+        for (String prefix : ruleConf.getPrefixesNotPermitted()) {
             if (StringUtils.join(generatedPassword).startsWith(prefix)) {
                 checkStartChar(generatedPassword, ruleConf);
             }
-        });
+        }
 
-        ruleConf.getSuffixesNotPermitted().forEach(suffix -> {
+        for (String suffix : ruleConf.getSuffixesNotPermitted()) {
             if (StringUtils.join(generatedPassword).endsWith(suffix)) {
                 checkEndChar(generatedPassword, ruleConf);
             }
-        });
+        }
     }
 
 }

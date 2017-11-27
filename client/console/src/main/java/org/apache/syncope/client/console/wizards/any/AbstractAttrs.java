@@ -38,7 +38,6 @@ import org.apache.syncope.common.lib.to.EntityTO;
 import org.apache.syncope.common.lib.to.GroupTO;
 import org.apache.syncope.common.lib.to.MembershipTO;
 import org.apache.syncope.common.lib.types.SchemaType;
-import org.apache.wicket.PageReference;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.core.util.lang.PropertyResolver;
 import org.apache.wicket.extensions.wizard.WizardModel.ICondition;
@@ -205,7 +204,7 @@ public abstract class AbstractAttrs<S extends AbstractSchemaTO> extends WizardSt
 
     protected List<String> getMembershipAuxClasses(final MembershipTO membershipTO, final String anyType) {
         try {
-            final GroupTO groupTO = groupRestClient.read(membershipTO.getGroupKey());
+            final GroupTO groupTO = groupRestClient.read(membershipTO.getRightKey());
             return groupTO.getTypeExtension(anyType).get().getAuxClasses();
         } catch (Exception e) {
             return Collections.emptyList();
@@ -217,12 +216,6 @@ public abstract class AbstractAttrs<S extends AbstractSchemaTO> extends WizardSt
         this.attrTOs.setObject(loadAttrTOs());
         this.membershipTOs.setObject(loadMembershipAttrTOs());
         return !attrTOs.getObject().isEmpty() || !membershipTOs.getObject().isEmpty();
-    }
-
-    public PageReference getPageReference() {
-        // SYNCOPE-1213
-        // default implementation does not requier to pass page reference, override this method of want otherwise
-        return null;
     }
 
     protected static class AttrComparator implements Comparator<AttrTO>, Serializable {

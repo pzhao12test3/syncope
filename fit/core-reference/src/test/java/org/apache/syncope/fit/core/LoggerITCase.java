@@ -18,11 +18,11 @@
  */
 package org.apache.syncope.fit.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -58,7 +58,7 @@ import org.apache.syncope.core.logic.ResourceLogic;
 import org.apache.syncope.core.logic.GroupLogic;
 import org.apache.syncope.core.logic.UserLogic;
 import org.apache.syncope.fit.AbstractITCase;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class LoggerITCase extends AbstractITCase {
 
@@ -230,6 +230,15 @@ public class LoggerITCase extends AbstractITCase {
                     assertTrue(eventCategoryTO.getEvents().contains(ResourceOperation.DELETE.name().toLowerCase()));
                     found = true;
                 }
+            }
+        }
+        assertTrue(found);
+
+        found = false;
+        for (EventCategoryTO eventCategoryTO : events) {
+            if (EventCategoryType.TASK == eventCategoryTO.getType()
+                    && "TestSampleJobDelegate".equals(eventCategoryTO.getCategory())) {
+                found = true;
             }
         }
         assertTrue(found);

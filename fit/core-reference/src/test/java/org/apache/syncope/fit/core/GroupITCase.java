@@ -18,12 +18,12 @@
  */
 package org.apache.syncope.fit.core;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.security.AccessControlException;
 import java.util.Collections;
@@ -90,7 +90,7 @@ import org.apache.syncope.common.rest.api.service.GroupService;
 import org.apache.syncope.common.rest.api.service.SyncopeService;
 import org.apache.syncope.core.provisioning.java.job.TaskJob;
 import org.apache.syncope.fit.AbstractITCase;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 public class GroupITCase extends AbstractITCase {
 
@@ -203,7 +203,7 @@ public class GroupITCase extends AbstractITCase {
 
         try {
             groupService2.read("29f96485-729e-4d31-88a1-6fc60e4677f3");
-            fail("This should not happen");
+            fail();
         } catch (SyncopeClientException e) {
             assertEquals(ClientExceptionType.DelegatedAdministration, e.getType());
         }
@@ -289,7 +289,7 @@ public class GroupITCase extends AbstractITCase {
 
         try {
             groupService2.update(groupPatch);
-            fail("This should not happen");
+            fail();
         } catch (ForbiddenException e) {
             assertNotNull(e);
         }
@@ -316,8 +316,10 @@ public class GroupITCase extends AbstractITCase {
 
         assertNotNull(resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), actual.getKey()));
 
-        DeassociationPatch deassociationPatch = new DeassociationPatch.Builder().key(actual.getKey()).
-                action(ResourceDeassociationAction.UNLINK).resource(RESOURCE_NAME_LDAP).build();
+        DeassociationPatch deassociationPatch = new DeassociationPatch();
+        deassociationPatch.setKey(actual.getKey());
+        deassociationPatch.setAction(ResourceDeassociationAction.UNLINK);
+        deassociationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
         assertNotNull(groupService.deassociate(deassociationPatch).readEntity(BulkActionResult.class));
 
@@ -338,13 +340,15 @@ public class GroupITCase extends AbstractITCase {
 
         try {
             resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), actual.getKey());
-            fail("This should not happen");
+            fail();
         } catch (Exception e) {
             assertNotNull(e);
         }
 
-        AssociationPatch associationPatch = new AssociationPatch.Builder().key(actual.getKey()).
-                action(ResourceAssociationAction.LINK).resource(RESOURCE_NAME_LDAP).build();
+        AssociationPatch associationPatch = new AssociationPatch();
+        associationPatch.setKey(actual.getKey());
+        associationPatch.setAction(ResourceAssociationAction.LINK);
+        associationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
         assertNotNull(groupService.associate(associationPatch).readEntity(BulkActionResult.class));
 
@@ -353,7 +357,7 @@ public class GroupITCase extends AbstractITCase {
 
         try {
             resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), actual.getKey());
-            fail("This should not happen");
+            fail();
         } catch (Exception e) {
             assertNotNull(e);
         }
@@ -383,7 +387,7 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
@@ -405,13 +409,15 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
 
-            AssociationPatch associationPatch = new AssociationPatch.Builder().key(groupTO.getKey()).
-                    action(ResourceAssociationAction.ASSIGN).resource(RESOURCE_NAME_LDAP).build();
+            AssociationPatch associationPatch = new AssociationPatch();
+            associationPatch.setKey(groupTO.getKey());
+            associationPatch.setAction(ResourceAssociationAction.ASSIGN);
+            associationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
             assertNotNull(groupService.associate(associationPatch).readEntity(BulkActionResult.class));
 
@@ -437,8 +443,10 @@ public class GroupITCase extends AbstractITCase {
 
             assertNotNull(resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey()));
 
-            DeassociationPatch deassociationPatch = new DeassociationPatch.Builder().key(groupTO.getKey()).
-                    action(ResourceDeassociationAction.DEPROVISION).resource(RESOURCE_NAME_LDAP).build();
+            DeassociationPatch deassociationPatch = new DeassociationPatch();
+            deassociationPatch.setKey(groupTO.getKey());
+            deassociationPatch.setAction(ResourceDeassociationAction.DEPROVISION);
+            deassociationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
             assertNotNull(groupService.deassociate(deassociationPatch).readEntity(BulkActionResult.class));
 
@@ -448,7 +456,7 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
@@ -470,13 +478,15 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
 
-            AssociationPatch associationPatch = new AssociationPatch.Builder().key(groupTO.getKey()).
-                    action(ResourceAssociationAction.PROVISION).resource(RESOURCE_NAME_LDAP).build();
+            AssociationPatch associationPatch = new AssociationPatch();
+            associationPatch.setKey(groupTO.getKey());
+            associationPatch.setAction(ResourceAssociationAction.PROVISION);
+            associationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
             assertNotNull(groupService.associate(associationPatch).readEntity(BulkActionResult.class));
 
@@ -503,13 +513,15 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
 
-            AssociationPatch associationPatch = new AssociationPatch.Builder().key(groupTO.getKey()).
-                    action(ResourceAssociationAction.PROVISION).resource(RESOURCE_NAME_LDAP).build();
+            AssociationPatch associationPatch = new AssociationPatch();
+            associationPatch.setKey(groupTO.getKey());
+            associationPatch.setAction(ResourceAssociationAction.PROVISION);
+            associationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
             assertNotNull(groupService.associate(associationPatch).readEntity(BulkActionResult.class));
 
@@ -519,8 +531,10 @@ public class GroupITCase extends AbstractITCase {
             assertNotNull(resourceService.readConnObject(
                     RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey()));
 
-            DeassociationPatch deassociationPatch = new DeassociationPatch.Builder().key(groupTO.getKey()).
-                    action(ResourceDeassociationAction.DEPROVISION).resource(RESOURCE_NAME_LDAP).build();
+            DeassociationPatch deassociationPatch = new DeassociationPatch();
+            deassociationPatch.setKey(groupTO.getKey());
+            deassociationPatch.setAction(ResourceDeassociationAction.DEPROVISION);
+            deassociationPatch.getResources().add(RESOURCE_NAME_LDAP);
 
             assertNotNull(groupService.deassociate(deassociationPatch).readEntity(BulkActionResult.class));
 
@@ -530,7 +544,7 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.GROUP.name(), groupTO.getKey());
-                fail("This should not happen");
+                fail();
             } catch (Exception e) {
                 assertNotNull(e);
             }
@@ -572,7 +586,7 @@ public class GroupITCase extends AbstractITCase {
 
             try {
                 updateGroup(groupPatch);
-                fail("This should not happen");
+                fail();
             } catch (SyncopeClientException e) {
                 assertEquals(ClientExceptionType.RequiredValuesMissing, e.getType());
             }
@@ -597,7 +611,7 @@ public class GroupITCase extends AbstractITCase {
         GroupService unauthenticated = clientFactory.create().getService(GroupService.class);
         try {
             unauthenticated.search(new AnyQuery.Builder().realm("/even").build());
-            fail("This should not happen");
+            fail();
         } catch (AccessControlException e) {
             assertNotNull(e);
         }
@@ -607,7 +621,7 @@ public class GroupITCase extends AbstractITCase {
         try {
             anonymous.getService(GroupService.class).
                     search(new AnyQuery.Builder().realm("/even").build());
-            fail("This should not happen");
+            fail();
         } catch (ForbiddenException e) {
             assertNotNull(e);
         }
@@ -847,7 +861,7 @@ public class GroupITCase extends AbstractITCase {
         // 4. verify that the user above is not found on LDAP
         try {
             resourceService.readConnObject(RESOURCE_NAME_LDAP, AnyTypeKind.USER.name(), userTO.getKey());
-            fail("This should not happen");
+            fail();
         } catch (SyncopeClientException e) {
             assertEquals(ClientExceptionType.NotFound, e.getType());
         }
