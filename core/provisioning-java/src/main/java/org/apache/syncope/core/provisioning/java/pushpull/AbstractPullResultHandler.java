@@ -69,23 +69,23 @@ public abstract class AbstractPullResultHandler extends AbstractSyncopeResultHan
     protected PullUtils pullUtils;
 
     @Autowired
-    protected NotificationManager notificationManager;
+    private NotificationManager notificationManager;
 
     @Autowired
-    protected AuditManager auditManager;
+    private AuditManager auditManager;
 
     @Autowired
-    protected ConnObjectUtils connObjectUtils;
+    private ConnObjectUtils connObjectUtils;
 
     @Autowired
-    protected VirSchemaDAO virSchemaDAO;
+    private VirSchemaDAO virSchemaDAO;
 
     @Autowired
-    protected VirAttrCache virAttrCache;
+    private VirAttrCache virAttrCache;
 
-    protected SyncopePullExecutor executor;
+    private SyncopePullExecutor executor;
 
-    protected Result latestResult;
+    private Result latestResult;
 
     protected abstract String getName(AnyTO anyTO);
 

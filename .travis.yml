@@ -6,18 +6,19 @@ after_failure:
 - cat target/log/*
 - cat target/failsafe-reports/org.apache.syncope.fit.*-output.txt
 before_cache:
-- find $TRAVIS_BUILD_DIR -name .ekstazi | while read line; do du -sh $line;         DIR=$(dirname
-  $HOME/CACHE$line); mkdir -p $DIR; cp -r $line $DIR; done
+- rm -rf $HOME/CACHE; find $TRAVIS_BUILD_DIR -name .ekstazi | while read line; do
+  du -sh $line;         DIR=$(dirname $HOME/CACHE$line); mkdir -p $DIR; cp -r $line
+  $DIR; done
 - echo CACHESIZE $(du -sh $HOME/CACHE)
 before_install:
 - find $HOME/CACHE -name .ekstazi | while read line; do du -sh $line;         DIR=$(dirname
-  ${line#$HOME/CACHE}); cp -r $line $DIR; done
+  ${line#$HOME/CACHE}); if [[ -d ${DIR#.ekstazi/} ]]; then cp -r $line $DIR; fi; done
 - echo 'MAVEN_OPTS="-Xms512m -Xmx1024m -XX:+TieredCompilation -XX:TieredStopAtLevel=1"'
   >~/.mavenrc
 before_script:
 - find $TRAVIS_BUILD_DIR -name .ekstazi | while read line; do rm -rf $line; done
 - find $HOME/CACHE -name .ekstazi | while read line; do du -sh $line;         DIR=$(dirname
-  ${line#$HOME/CACHE}); cp -r $line $DIR; done
+  ${line#$HOME/CACHE}); if [[ -d ${DIR#.ekstazi/} ]]; then cp -r $line $DIR; fi; done
 - cd fit/core-reference
 cache:
   directories:
